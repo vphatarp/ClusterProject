@@ -8,12 +8,12 @@ Neighbor States:
 4) Backup:- Based on a certain criteria a Backup Node will be designated.
 5) Master:- This node has been elected as a the node that would co-ordinate the state transfer and also inform all the other nodes of the health of neighbors.
 
-#Election States:
+# Election States:
 1) DISCOVER: The nodes havent reached Quorum yet.
 2) ELEC_CONSENSUS: A master node has been identified, but yet to receive a message back from master. This is to ensure consistency.
 3) ELEC_COMPLETE: Election has completed and the Master node has acknowledged all the other nodes that it would be taking up the role.
 
-#Election Mechanism:
+# Election Mechanism:
 There are 2 mechanisms via which the nodes exchange hello packets with each other.
 Periodically: Hello packets are sent every 3 seconds, between the nodes.
 Triggered: There are cases where a node sends a packet before the periodic interval in order to expedite the election process. For example: a new node that has joined the cluster. The current Master node or a candidate node will immediately respond back with a packet in the right Election state to bring it up to sync.
@@ -25,17 +25,17 @@ Assume the scenario wherein Node1 , Node2, Node3 enter a cluster one by one.(Quo
    a) Only if all the nodes in the cluster have sent out an ELEC_CONSENSUS packet indicating that Node3 is the master node.
    b) And the master node has send them a packet back indicating that it has taken up the role, by sending out an ELEC_COMPLETE packet.
 
-#Failovers(failover to backup node still needs to be worked on):
+# Failovers(failover to backup node still needs to be worked on):
 1) All the non-master nodes keep track of only the health of the Master node.
 2) The master node keeps track of the health of all the non-master nodes.
 Once a failover has been detected, all the nodes shall enter back into DISCOVER mode and start the election process again.
 Everytime a non-master node dies, the Master node checks if the number of nodes have fallen below Quorum and accordingly either decides to stay in the same state or enter into ELEC_CONSENSUS state.
 
 
-#Node Entering the Cluster after Election is complete
+# Node Entering the Cluster after Election is complete
 1) Pre-emption is not enabled. Hence a node that has entered after election is complete, will be sent a packet from the Master node and will sync up its state with the Master node and move to ELEC_COMPLETE and FULL state.
 
-#Node in DISCOVER mode entering a Cluster which is currently in ELEC_CONSENSUS
+# Node in DISCOVER mode entering a Cluster which is currently in ELEC_CONSENSUS
 1) If the ID of the node is higher, all the nodes will select this particular node as the master node.
 2) If the ID of the node is lower, then the Master node will include it in the list of neighbors.
 
